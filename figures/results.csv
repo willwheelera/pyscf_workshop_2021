@@ -1,0 +1,11 @@
+,Unnamed: 0,time,system,gpu
+0,0,191.47644651199516,coronene,False
+1,0,99.62606213599793,coronene,True
+2,0,55.44420500200067,anthracene,False
+3,0,43.41222419300175,anthracene,True
+4,0,122.83018312400236,ovalene,True
+5,0,444.1154468500026,ovalene,False
+6,0,27.008248409998487,benzene,True
+7,0,11.268838192998372,benzene,False
+8,0,219.60211919499852,hexabenzocoronene,True
+9,0,961.8913051630008,hexabenzocoronene,False

@@ -1,0 +1,149 @@
+% Running VMC
+
+\begin{frame}%{Running VMC}
+\begin{tikzpicture}[
+    >=triangle 60,
+    start chain=going below,
+    node distance=3mm and 3mm,
+    every join/.style={black, ->},
+]
+\scriptsize
+\tikzset{
+  box1/.style={rectangle, minimum height=8cm},
+  box2/.style={draw, rectangle, rounded corners, minimum width=4cm},
+  base/.style={draw, align=center, minimum height=2ex},
+  flowelement/.style={base, fill=yellow!10!white, on chain, on grid, rectangle, rounded corners, aspect=3, text width=8em, inner sep=1mm},
+  offchain/.style={base, rectangle, rounded corners, fill=yellow!10!white, text width=8em},
+  % coord node style is used for placing corners of connecting lines
+  coord/.style={rectangle, minimum height=2ex},
+  % -------------------------------------------------
+  % Connector line styles for different parts of the diagram
+  it/.style={font={\small\itshape}}
+}
+
+% Containers
+\node (cpubox) [box1, draw, fill=blue!5!white, minimum width=9.0cm]{};
+\node (gpubox) [box1, right=of cpubox, fill=white!5!white, minimum width=5cm]{};
+
+% VMC elements
+\node (vmcbox) [box2, below right=of cpubox.north west, minimum height=4.5cm, fill=magenta!10!white]{};
+\node (mclabel) [below=.8ex of vmcbox.north] {Monte Carlo steps};
+\node (gradpsi) [flowelement, below=.8ex of mclabel.south, draw=cyan, thick]{compute $\nabla\Psi(R)$};
+\node (proposemove) [flowelement, join]{propose  move $R\rightarrow R'$};
+\node (gradpsi2) [flowelement, join, draw=cyan, thick]{compute $\Psi(R'), \nabla\Psi(R')$};
+\node (acceptmove) [flowelement, join]{accept move $P_{\rm accept}(R\rightarrow R')$};
+
+% Energy elements
+\node (energybox) [box2, below=of vmcbox, minimum height=2.8cm, fill=magenta!10!white]{};
+\draw[->] (vmcbox) -- (energybox);
+\node (energylabel) [below=.8ex of energybox.north] {Energy};
+\node (kinetic) [offchain, below=.8ex of energylabel, draw=cyan, thick]{kinetic $\nabla^2\Psi(R)$};
+\node (ecp) [offchain, below=1ex of kinetic, draw=cyan, thick]{ECP $\Psi(\widetilde{R})$};
+\node (potential) [offchain, below=1ex of ecp]{Coulomb/Ewald};
+
+
+% WF elements
+\node (wfbox) [box2, right=of vmcbox.north east, anchor=north west, minimum height=7cm, fill=cyan!10!white]{};
+\node (slater) [below=.8ex of wfbox.north]{Slater};
+\node (slatergrad) [offchain, below=.8ex of slater]{\texttt{eval\textunderscore gto} (AOs)};
+\node (mos) [offchain, below=of slatergrad]{MOs};
+\node (dets) [offchain, below=of mos]{determinant ratios};
+\draw[->] (slatergrad) -- (mos);
+\draw[->] (mos) -- (dets);
+
+\node (jastrow) [below=3cm of slater]{Jastrow};
+\node (dist) [offchain, below=.8ex of jastrow]{ee, ei distances};
+\node (basis) [offchain, below=of dist]{\parbox{8em}{basis functions \\ ei: $a(r_{iI}), \nabla a(r_{iI})$ \\ ee: $b(r_{ij}), \nabla b(r_{ij})$}};
+\draw[->] (dist) -- (basis);
+
+
+% Labels
+\node (cpulabel) [above=.8ex of cpubox]{CPU};
+%\node (gpulabel) [above=.8ex of gpubox]{GPU};
+
+% lines
+\draw[-, cyan!70!black] (gradpsi.east) -- (wfbox.west);
+\draw[-, cyan!70!black] (gradpsi2.east) -- (wfbox.west);
+\draw[-, cyan!70!black] (kinetic.east) -- (wfbox.west);
+\draw[-, cyan!70!black] (ecp.east) -- (wfbox.west);
+\end{tikzpicture}
+\end{frame}
+
+
+\begin{frame}%{Running VMC on GPU}
+\begin{tikzpicture}[
+    >=triangle 60,
+    start chain=going below,
+    node distance=3mm and 3mm,
+    every join/.style={black, ->},
+]
+\scriptsize
+\tikzset{
+  box1/.style={rectangle, minimum height=8cm},
+  box2/.style={draw, rectangle, rounded corners, minimum width=4cm},
+  base/.style={draw, align=center, minimum height=2ex},
+  flowelement/.style={base, fill=yellow!10!white, on chain, on grid, rectangle, rounded corners, aspect=3, text width=8em, inner sep=1mm},
+  offchain/.style={base, rectangle, rounded corners, fill=yellow!10!white, text width=8em},
+  % coord node style is used for placing corners of connecting lines
+  coord/.style={coordinate, on chain, on grid, node distance=6mm and 25mm},
+  % -------------------------------------------------
+  % Connector line styles for different parts of the diagram
+  it/.style={font={\small\itshape}}
+}
+
+% Containers
+\node (cpubox) [box1, draw, fill=blue!5!white, minimum width=9.0cm]{};
+\node (gpubox) [box1, draw, right=of cpubox, fill=green!5!white, minimum width=5cm]{};
+
+% VMC elements
+\node (vmcbox) [box2, below right=of cpubox.north west, minimum height=4.5cm, fill=magenta!10!white]{};
+\node (mclabel) [below=.8ex of vmcbox.north] {Monte Carlo steps};
+\node (gradpsi) [flowelement, below=.8ex of mclabel.south, draw=cyan, thick]{compute $\nabla\Psi(R)$};
+\node (proposemove) [flowelement, join]{propose  move $R\rightarrow R'$};
+\node (gradpsi2) [flowelement, join, draw=cyan, thick]{compute $\Psi(R'), \nabla\Psi(R')$};
+\node (acceptmove) [flowelement, join]{accept move $P_{\rm accept}(R\rightarrow R')$};
+
+% Energy elements
+\node (energybox) [box2, below=of vmcbox, minimum height=2.8cm, fill=magenta!10!white]{};
+\draw[->] (vmcbox) -- (energybox);
+\node (energylabel) [below=.8ex of energybox.north] {Energy};
+\node (kinetic) [offchain, below=.8ex of energylabel, draw=cyan, thick]{kinetic $\nabla^2\Psi(R)$};
+\node (ecp) [offchain, below=1ex of kinetic, draw=cyan, thick]{ECP $\Psi(\widetilde{R})$};
+\node (potential) [offchain, below=1ex of ecp, draw=gray]{\color{gray}Coulomb};
+\node (ewald) at (potential.east -| gpubox.north) [offchain, draw=gray]{Ewald};
+\draw[->, thick, green!70!black] (energybox.east |- ewald.center) -- (ewald);
+
+
+% WF elements
+\node (wfbox) [box2, right=of vmcbox.north east, anchor=north west, minimum height=7cm, fill=cyan!10!white]{};
+\node (slater) [below=.8ex of wfbox.north]{Slater};
+\node (slatergrad) [offchain, below=.8ex of slater]{\texttt{eval\textunderscore gto} (AOs)};
+\node (moscoord) [coord, below=of slatergrad]{};
+\node (detscoord) [coord, below=of moscoord]{};
+\node (mos) at (moscoord -| gpubox.north) [offchain] {MOs};
+\node (dets) [offchain, below=of mos]{determinant ratios};
+\draw[->, thick, green!70!black] (slatergrad) -- (mos);
+\draw[->] (mos) -- (dets);
+%\draw[->] (dets) -- (detscoord);
+
+\node (jastrow) [below=3cm of slater]{Jastrow};
+\node (jastcoord) [coord, below=1.8ex of jastrow]{};
+\node (distcoord) [coord, below=1.8ex of jastcoord]{};
+\node (dist) at (distcoord -| gpubox.north) [offchain]{ee, ei distances};
+\node (basis) [offchain, below=of dist]{\parbox[c]{8em}{basis functions \\ ei: $a(r_{iI}), \nabla a(r_{iI})$ \\ ee: $b(r_{ij}), \nabla b(r_{ij})$}};
+\draw[->] (dist) -- (basis);
+\draw[->, thick, green!70!black] (jastcoord) -- (dist);
+%\draw[->] (basis) -- (basis -| jastcoord);
+
+
+% Labels
+\node (cpulabel) [above=.8ex of cpubox]{CPU};
+\node (gpulabel) [above=.8ex of gpubox]{GPU};
+
+% lines
+\draw[-, cyan!70!black] (gradpsi.east) -- (wfbox.west);
+\draw[-, cyan!70!black] (gradpsi2.east) -- (wfbox.west);
+\draw[-, cyan!70!black] (kinetic.east) -- (wfbox.west);
+\draw[-, cyan!70!black] (ecp.east) -- (wfbox.west);
+\end{tikzpicture}
+\end{frame}

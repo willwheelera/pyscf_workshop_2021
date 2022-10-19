@@ -1,0 +1,132 @@
+import pandas as pd
+import seaborn as sns
+import matplotlib.pyplot as plt
+import numpy as np
+import scipy
+
+#import pylustrator
+#pylustrator.start()
+
+df = pd.read_csv("collected.csv")
+df.method.unique()
+df['error'] = 100*np.abs((1 - (df['HFref']-df['totalenergy'])/(df['HFref'] - df['SHCIref'])))
+df_rms = df.groupby(['method']).aggregate(['mean','std','min','max']).reset_index()
+df_rms = df_rms[['method','error']]
+df_rms.columns = [' '.join(col).strip() for col in df_rms.columns.values]
+
+
+expon = "Exp."
+scaling = {'UCCSD':6,
+         'UCCSD(T)':7,
+         'DMRG': expon,
+         'iFCIQMC':expon,
+         'AFQMC':4,
+         'DMC(SD)':3,
+         'DFT':3,
+         'SEET(FCI/GF2)':expon,
+         'SC-GW':4,
+         'GF2':5,
+         'QSGW':4,
+         'PBE+RPA':4,
+         'HSE06':4,
+         'LDA':3,
+         'PBE':3,
+         'SCAN':3,
+         'B3LYP':4,
+         'MRLCC':6,
+         'HF+RPA':4,
+         'CIC+Q': 8,
+         'SHCI':expon,
+         'CISD':4,
+         'HF':4
+}
+
+methods = [k for k in scaling]
+scaling = [v for v in scaling.values()]
+df_scaling = df_rms.merge(pd.DataFrame({'method':methods,'scaling':scaling}), on='method')
+df_scaling['scaling'] = pd.Categorical(df_scaling['scaling'], [expon,8,7,6,5,4,3])
+
+
+sns.catplot(data=df_scaling, x='error max',y='scaling', hue='scaling', kind='swarm',marker='o', edgecolor='k', s=10, alpha=0.5, palette='flare', legend=False, aspect=1.5, height=2.5)
+plt.xlim(20,-1)
+plt.ylim(7.0,-1)
+plt.axvline(0.0, color='gray', linestyle="--")
+plt.ylabel("Scaling with number of electrons")
+plt.xlabel(r"Maximum error in % correlation energy")
+
+
+for i, row in df_scaling.iterrows():
+    plt.annotate(row['method'], (row['error max'],0), fontsize=9)
+
+
+#% start: automatic generated code from pylustrator
+plt.figure(1).ax_dict = {ax.get_label(): ax for ax in plt.figure(1).axes}
+import matplotlib as mpl
+plt.figure(1).axes[0].set_position([0.178287, 0.096806, 0.796713, 0.865694])
+plt.figure(1).axes[0].add_patch(mpl.patches.Rectangle((20.0, 6.5), width=9.5, height=3.0))  # id=plt.figure(1).axes[0].patches[0].new
+plt.figure(1).axes[0].patches[0].set_facecolor("#75f7f1a1")
+plt.figure(1).axes[0].add_patch(mpl.patches.FancyArrowPatch((20.0, 6.5), (9.5, 3.0), arrowstyle='Simple,head_length=10,head_width=10,tail_width=2', facecolor='black', clip_on=False, zorder=2))  # id=plt.figure(1).axes[0].patches[1].new
+plt.figure(1).axes[0].patches[1].set_edgecolor("#1a3f4bff")
+plt.figure(1).axes[0].patches[1].set_facecolor("#1a3f4bff")
+plt.figure(1).axes[0].patches[1].set_linewidth(2.0)
+plt.figure(1).axes[0].patches[1].set_positions((15.797315371857495, 5.731830496148939), (11.599082507569618, 5.749237844135484))
+plt.figure(1).axes[0].add_patch(mpl.patches.Rectangle((20.0, 6.5), width=9.5, height=3.0))  # id=plt.figure(1).axes[0].patches[2].new
+plt.figure(1).axes[0].patches[2].set_facecolor("#75f7f1a1")
+plt.figure(1).axes[0].patches[2].set_height(1.404834)
+plt.figure(1).axes[0].patches[2].set_width(4.528622)
+plt.figure(1).axes[0].patches[2].set_xy([7.536031, 5.009978])
+plt.figure(1).axes[0].texts[0].set_position([16.151881, 4.206924])
+plt.figure(1).axes[0].texts[0].xy = (16.151881, 4.340854)
+plt.figure(1).axes[0].texts[0].xy = (16.151881, 4.206924)
+plt.figure(1).axes[0].texts[1].set_position([8.790629, 0.663376])
+plt.figure(1).axes[0].texts[1].xy = (8.790629, 0.720774)
+plt.figure(1).axes[0].texts[1].xy = (8.790629, 0.663376)
+plt.figure(1).axes[0].texts[2].set_position([19.673360, 4.843092])
+plt.figure(1).axes[0].texts[2].xy = (19.673360, 4.709162)
+plt.figure(1).axes[0].texts[2].xy = (19.673360, 4.843092)
+plt.figure(1).axes[0].texts[3].set_position([11.877296, 5.562187])
+plt.figure(1).axes[0].texts[3].xy = (11.479571, 5.676984)
+plt.figure(1).axes[0].texts[3].xy = (11.877296, 5.562187)
+plt.figure(1).axes[0].texts[4].set_position([3.182362, 0.108895])
+plt.figure(1).axes[0].texts[4].xy = (2.722988, 0.128028)
+plt.figure(1).axes[0].texts[4].xy = (3.182362, 0.108895)
+plt.figure(1).axes[0].texts[5].set_position([18.772036, 3.621316])
+plt.figure(1).axes[0].texts[5].xy = (18.410468, 3.716980)
+plt.figure(1).axes[0].texts[5].xy = (18.772036, 3.621316)
+plt.figure(1).axes[0].texts[8].set_position([13.802578, 4.900135])
+plt.figure(1).axes[0].texts[8].xy = (13.947205, 4.900135)
+plt.figure(1).axes[0].texts[8].xy = (13.802578, 4.900135)
+plt.figure(1).axes[0].texts[10].set_position([5.334480, 2.678334])
+plt.figure(1).axes[0].texts[10].xy = (5.334480, 2.716600)
+plt.figure(1).axes[0].texts[10].xy = (5.334480, 2.678334)
+plt.figure(1).axes[0].texts[11].set_position([17.364236, 5.610938])
+plt.figure(1).axes[0].texts[11].xy = (17.219609, 5.687469)
+plt.figure(1).axes[0].texts[11].xy = (17.364236, 5.610938)
+plt.figure(1).axes[0].texts[16].set_position([10.417685, -0.500918])
+plt.figure(1).axes[0].texts[16].xy = (8.289923, -0.099129)
+plt.figure(1).axes[0].texts[16].xy = (10.417685, -0.500918)
+plt.figure(1).axes[0].texts[17].set_position([2.684662, -0.386121])
+plt.figure(1).axes[0].texts[17].xy = (1.870001, -0.510168)
+plt.figure(1).axes[0].texts[17].xy = (2.684662, -0.386121)
+plt.figure(1).axes[0].texts[18].set_position([8.117132, 2.263804])
+plt.figure(1).axes[0].texts[18].xy = (8.117132, 2.359468)
+plt.figure(1).axes[0].texts[18].xy = (8.117132, 2.263804)
+plt.figure(1).axes[0].texts[19].set_position([3.697052, 1.670340])
+plt.figure(1).axes[0].texts[19].xy = (3.037735, 1.766004)
+plt.figure(1).axes[0].texts[19].xy = (3.697052, 1.670340)
+plt.figure(1).axes[0].texts[20].set_position([4.492501, 0.539921])
+plt.figure(1).axes[0].texts[20].xy = (1.961526, 0.559054)
+plt.figure(1).axes[0].texts[20].xy = (4.492501, 0.539921)
+plt.figure(1).axes[0].text(0.5, 0.5, 'New Text', transform=plt.figure(1).axes[0].transAxes)  # id=plt.figure(1).axes[0].texts[21].new
+plt.figure(1).axes[0].texts[21].set_color("#1a3f4bff")
+plt.figure(1).axes[0].texts[21].set_fontsize(8)
+plt.figure(1).axes[0].texts[21].set_ha("center")
+plt.figure(1).axes[0].texts[21].set_position([0.281256, 0.035135])
+plt.figure(1).axes[0].texts[21].set_rotation(0.0)
+plt.figure(1).axes[0].texts[21].set_text("1000x \n prefactor")
+plt.figure(1).axes[0].texts[21].set_weight("normal")
+#% end: automatic generated code from pylustrator
+
+#plt.show()
+plt.savefig("scaling_vs_energy.pdf",bbox_inches='tight',bbox_extra_artists=[])
+

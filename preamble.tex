@@ -1,0 +1,93 @@
+\documentclass[11pt, t, aspectratio=169]{beamer}
+
+\mode<presentation>
+{
+  \usetheme{default}      % or try Darmstadt, Madrid, Warsaw, ...
+  \usecolortheme{default} % or try albatross, beaver, crane, ...
+  \usefonttheme{default}  % or try serif, structurebold, ...
+  \setbeamertemplate{navigation symbols}{}
+  \setbeamertemplate{caption}[numbered]
+  \setbeamertemplate{footline}[frame number]
+} 
+
+% packages
+\usepackage[english]{babel}
+\usepackage[utf8]{inputenc}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{amsthm}
+\usepackage{appendixnumberbeamer}
+\usepackage{bbm}
+\usepackage{braket}
+\usepackage{color}
+\usepackage{enumitem}
+\usepackage{framed}
+%\usepackage{fullpage} % Messes up formatting, puts big space above title
+\usepackage{graphicx}
+\usepackage{multirow}
+\usepackage{tikz}
+\usetikzlibrary{positioning}
+\usetikzlibrary{shapes.arrows}
+\usetikzlibrary{shapes, arrows, chains}
+\usepackage[colorinlistoftodos]{todonotes}
+\usepackage[absolute,overlay]{textpos}
+%\usepackage{hyperref} % Should be last package imported
+
+\setbeamercolor{framesource}{fg=gray}
+\setbeamerfont{framesource}{size=\tiny}
+\newcommand{\source}[1]{\begin{textblock*}{4.5cm}(8.2cm,8.8cm)
+    \begin{beamercolorbox}[ht=0.5cm,right]{framesource}
+        \usebeamerfont{framesource}\usebeamercolor[gray]{framesource} Source: {#1}
+    \end{beamercolorbox}
+\end{textblock*}}
+\newcommand{\sourcelong}[1]{\begin{textblock*}{8cm}(4.7cm,8.8cm)
+    \begin{beamercolorbox}[ht=0.5cm,right]{framesource}
+        \usebeamerfont{framesource}\usebeamercolor[gray]{framesource} Source: {#1}
+    \end{beamercolorbox}
+\end{textblock*}}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%% SHORTCUTS %%%
+
+%\newcommand{\pagehline}{\\\specialrule{.01pt}{0pt}{5pt}}
+\newcommand{\pagehline}{\noindent\rule{\textwidth}{0.2pt}}
+
+\newcommand{\paren}[1]{\left( #1 \right)}
+\newcommand{\expectation}[1]{\left\langle #1 \right\rangle}
+\newcommand{\brac}[1]{\left[ #1 \right]}
+\newcommand{\zerodel}{.\kern-\nulldelimiterspace}
+\newcommand{\abs}[1]{\left\vert #1 \right\vert}
+\newcommand{\wt}[1]{\widetilde{#1}}
+
+\newcommand{\Evec}{\mathbf{E}}
+\newcommand{\Bvec}{\mathbf{B}}
+\newcommand{\kvec}{\mathbf{k}}
+\newcommand{\pvec}{\mathbf{p}}
+\newcommand{\xvec}{\mathbf{x}}
+\newcommand{\rvec}{\mathbf{r}}
+\newcommand{\Rvec}{\mathbf{R}}
+\newcommand{\Lvec}{\mathbf{L}}
+\newcommand{\curl}{\nabla\times}
+\renewcommand{\div}{\nabla\cdot}
+
+\DeclareMathOperator{\Lagr}{\mathcal{L}}
+\DeclareMathOperator{\Ham}{\mathcal{H}}
+\DeclareMathOperator{\tr}{tr}
+
+\newcommand{\lucas}[1]{\textcolor{blue}{\bf [LKW #1]}} % Lucas comment
+
+
+\newcommand{\wideframe}[3]{% width, title, body
+\begin{frame}{#2}
+\makebox[\linewidth][c]{
+\begin{minipage}{#1}
+\begin{center}
+#3
+\end{center}
+\end{minipage}
+}
+\end{frame}
+}
+
+\input{init_listings}

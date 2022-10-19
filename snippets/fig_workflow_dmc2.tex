@@ -1,0 +1,28 @@
+\begin{tikzpicture}[>=stealth, thick]
+
+\node(pyscf) [rectangle, draw, fill=blue!5!white, minimum width=5cm, minimum height=1.5cm]{\parbox{8cm}{\centering mean-field or multi-determinant calculation 
+
+e.g. HF, DFT, CISD, CASCI
+
+(from {\bf PySCF})
+}};
+
+%\node(scfdata) [below=1cm of pyscf, rectangle, draw, fill=cyan!20!white, minimum width=3cm]{cell, orbitals};
+
+\node(optimize) [below=9mm of pyscf, rectangle, draw, fill=green!10!white, minimum width=5cm, minimum height=1.5cm]{\parbox{4cm}{\centering {\bf OPTIMIZE $\Psi$} \\ adjust parameters to minimize $\langle \Psi | H | \Psi \rangle$}};
+
+%\node(wf)[below=1cm of optimize, rectangle, draw, fill=cyan!20!white, minimum width=4cm]{\parbox{2cm}{\centering trial wave function}};
+
+%\node(vmc) [below left=9mm and 5mm of optimize.south, anchor=north east, rectangle, draw, fill=green!10!white, minimum width=3.5cm, minimum height=2.0cm]{\parbox{5.0cm}{\centering {\bf VMC} \\ average quantities $\langle\Psi|O|\Psi\rangle$ over optimized $\Psi$}};
+\node(dmc) [below =9mm of optimize.south, anchor=north, rectangle, draw, fill=green!10!white, minimum width=3.5cm, minimum height=2.0cm]{\parbox{5.0cm}{\centering {\bf DMC} \\ average quantities $\langle\Psi|O|\Phi_0\rangle$ with projected ground state $\Phi_0$}};
+
+\draw[->] (pyscf) -- 
+%node [right=1cm, ellipse, draw=gray, fill=cyan!10!white, minimum width=2cm]{cell, orbitals} 
+(optimize);
+%\draw[->] (optimize) -- (vmc);
+\draw[->] (optimize) -- 
+%node[right=5mm, ellipse, draw=gray, fill=cyan!10!white, minimum width=2.2cm]{\parbox{2cm}{\centering optimized parameters}} 
+(dmc);
+\end{tikzpicture}
+
+

@@ -1,0 +1,257 @@
+
+% 0. Many methods for electronic structure calculations
+% tradeoffs between accuracy and cost scaling
+% want to compare results from different methods
+% DMC is a "good deal" for electronic calculations
+
+\begin{frame}{Electronic structure methods}
+\vspace{2em}
+\begin{minipage}{.26\textwidth}
+multiple techniques:
+\begin{itemize}[leftmargin=1em, itemsep=1ex, label=-]
+\item tradeoff: 
+
+cost vs accuracy
+\item different situations 
+\item validation on the same problem
+\end{itemize}
+\end{minipage}
+\end{frame}
+
+\begin{frame}{Electronic structure methods}
+\begin{minipage}{.26\textwidth}
+multiple techniques:
+\begin{itemize}[leftmargin=1em, itemsep=1ex, label=-]
+\item tradeoff: 
+
+cost vs accuracy
+\item different situations 
+\item validation on the same problem
+\end{itemize}
+
+\vspace{1em}
+diffusion Monte Carlo is a good deal!
+
+\vspace{1em}
+\parbox{\textwidth}{\tiny K.T. Williams, et. al., Phys. Rev. X 10, 011041, (2020).}
+\end{minipage}
+\hspace{.03\textwidth}
+\begin{minipage}{.65\textwidth}
+\includegraphics[width=\textwidth]{figures/scaling_vs_energy.pdf}
+\end{minipage}
+\end{frame}
+
+
+% Pre-1: what is DMC
+\begin{frame}{Diffusion Monte Carlo: projection onto ground state}
+
+\begin{minipage}[t]{.45\textwidth}
+\vspace{-1em}
+\begin{itemize}[leftmargin=0em]
+\item apply $e^{-\hat{H}t}$ to trial function $|\Psi_T\rangle$
+\item $t\rightarrow\infty$
+\item higher eigenstates suppressed
+\end{itemize}
+
+\pagehline
+
+Expansion in eigenstates
+\vspace{-1ex}
+\begin{align*}
+|\Psi_T\rangle &= c_0 |\Phi_0\rangle + c_1 |\Phi_1\rangle + \ldots \\
+e^{-\hat{H}t}|\Psi_T\rangle &= c_0 e^{-E_0t}|\Phi_0\rangle + c_1  e^{-E_1t}|\Phi_1\rangle + \ldots
+\end{align*}
+\end{minipage}
+\end{frame}
+
+\begin{frame}{Diffusion Monte Carlo: projection onto ground state}
+
+\begin{minipage}[t]{.45\textwidth}
+\vspace{-1em}
+\begin{itemize}[leftmargin=0em]
+\item apply $e^{-\hat{H}t}$ to trial function $|\Psi_T\rangle$
+\item $t\rightarrow\infty$
+\item higher eigenstates suppressed
+\end{itemize}
+
+\pagehline
+
+Expansion in eigenstates
+\vspace{-1ex}
+\begin{align*}
+|\Psi_T\rangle &= c_0 |\Phi_0\rangle + c_1 |\Phi_1\rangle + \ldots \\
+e^{-\hat{H}t}|\Psi_T\rangle &= c_0 e^{-E_0t}|\Phi_0\rangle + c_1  e^{-E_1t}|\Phi_1\rangle + \ldots
+\end{align*}
+
+\pagehline
+
+Approximations:
+
+\begin{itemize}[leftmargin=1em]
+\item fixed nodes $\Psi_T(R) = 0 \rightarrow \Psi(R) = 0$
+\item localize nonlocal pseudopotentials
+\end{itemize}
+$\rightarrow$ need good trial function $\Psi_T$
+\end{minipage}
+\begin{minipage}[t]{.45\textwidth}
+Random walk $R_1 \rightarrow R_2 \rightarrow \ldots$
+
+\begin{align*}
+e^{-\hat{H}t}|\Psi_T\rangle = \int & dR_1 \ldots dR_N
+\\& e^{-\hat{H}\tau}|R_N\rangle\langle R_N|
+\\&\ldots
+\\& e^{-\hat{H}\tau}|R_2\rangle\langle R_2|
+\\& e^{-\hat{H}\tau}|R_1\rangle\langle R_1|\Psi_T\rangle 
+\end{align*}
+
+
+\end{minipage}
+
+\end{frame}
+
+% 2. explain vmc and dmc
+% Create a trial function, e.g. Slater determinant times Jastrow function (of electron distances)
+% VMC evaluates \langle \Psi | O | \Psi \rangle (e.g. energy)
+% can optimize parameters to minimize vmc energy
+% DMC projects the trial function onto the ground state,  e^{-\beta H} |\Psi_T\rangle
+\input{slides/methods}
+
+
+
+% 1. workflow diagram
+% Start with a mean-field or multi-determinant calculation to make trial function
+% Optimize wf parameters using VMC energy and gradients
+% Evaluate accumulators using VMC and DMC
+\begin{frame}{Typical DMC workflow}
+\begin{minipage}{\textwidth}
+  \begin{center}
+  \input{snippets/fig_workflow_dmc}
+  \end{center}
+\end{minipage}
+\end{frame}
+
+
+% 4. example code benzene
+% PySCF cell
+% PySCF mf
+% supercell
+% OPTIMIZE
+% VMC
+% DMC
+\input{slides/example_code_benzene}
+
+% Performance
+\begin{frame}{Code profile}
+\begin{minipage}{.45\textwidth}
+\includegraphics[height=.45\textheight]{figures/profile_benzene.pdf}
+
+\includegraphics[height=.45\textheight]{figures/profile_coronene.pdf}
+\end{minipage}
+\hspace{.02\textwidth}
+\begin{minipage}{.45\textwidth}
+\includegraphics[height=.45\textheight]{figures/profile_Si1.pdf}
+
+\includegraphics[height=.45\textheight]{figures/profile_Si2.pdf}
+\end{minipage}
+\end{frame}
+
+
+
+
+% How it works: flowchart of VMC
+\input{slides/gpu_flowchart}
+
+% CuPy
+\begin{frame}{GPU implementation with CuPy}
+
+\vspace{1em}
+
+\begin{minipage}{0.93\textwidth}
+\begin{itemize}[leftmargin=0em, itemsep=1em]
+\item GPU with CuPy$^*$ library \texttt{https://cupy.dev}
+
+\quad  uses NumPy interface 
+\item minimal code changes 
+
+\quad same code with CPU/GPU
+\item still optimizing performance
+\end{itemize}
+
+\vspace{1em}
+\parbox{\textwidth}{\tiny $^*$Ryosuke Okuta, Yuya Unno, Daisuke Nishino, Shohei Hido and Crissman Loomis. CuPy: A NumPy-Compatible Library for NVIDIA GPU Calculations. Proceedings of Workshop on Machine Learning Systems (LearningSys) in The Thirty-first Annual Conference on Neural Information Processing Systems (NIPS), (2017).}
+\end{minipage}
+
+\end{frame}
+
+% 6. GPU performance
+% VMC on small hydrocarbon molecules
+% GPU is a big reduction as nelec becomes large (many systems of interest)
+\begin{frame}{Preliminary GPU testing}
+
+\vspace{.02\textheight}
+\begin{minipage}{0.32\textwidth}
+
+\begin{itemize}[leftmargin=0em, itemsep=1em]
+\item more walkers $\rightarrow$ speedup
+\item more electrons $\rightarrow$ speedup
+\item periodic is challenging
+\item GPU memory limitations
+\end{itemize}
+
+\end{minipage}
+\hspace{.01\textwidth}
+\begin{minipage}{0.62\textwidth}
+\begin{minipage}{0.51\textwidth}
+\includegraphics[height=.40\textheight]{/home/will/Research/pyqmc_gpu/june2021_gpu_timing/singlecore_speedup_vs_nelec.pdf}
+
+\includegraphics[height=.40\textheight]{/home/will/Research/pyqmc_gpu/june2021_gpu_timing/molecules_speedup_vs_nelec.pdf}
+\end{minipage}
+\hspace{.02\textwidth}
+\begin{minipage}{0.39\textwidth}
+\begin{center}
+\includegraphics[height=.40\textheight]{/home/will/Research/pyqmc_gpu/june2021_LiH_timing/singlecore_speedup_vs_nelec.pdf}
+
+\includegraphics[height=.40\textheight]{/home/will/Research/pyqmc_gpu/timing_results/LiH_speedup_vs_nelec.pdf}
+\end{center}
+%\includegraphics{figures/gpuplot.pdf}
+\end{minipage}
+\end{minipage}
+\end{frame}
+
+
+% 8. Conclusion
+% flexible, all-python code
+% active development, new features and optimizations
+% available on github and pypi
+
+
+\begin{frame}{Going forward}
+
+\vspace{1em}
+
+What we have now
+
+\begin{itemize}[leftmargin=1em]
+\item VMC, DMC, and optimization of ground and excited states
+\item Working GPU implementation using CuPy
+
+\quad Same code for CPU or GPU calculations
+\item Integrated into PySCF
+\end{itemize}
+
+\vspace{1em}
+
+What we can do with GPUs
+
+\begin{itemize}[leftmargin=1em]
+\item Leveraging GPU resources on supercomputers
+\item Benchmark studies on molecules (ground/excited states)
+\item Further optimization to speed up periodic calculations
+\end{itemize}
+
+
+\footnotesize{
+% Citations
+}
+
+\end{frame}

@@ -1,0 +1,79 @@
+\begin{frame}{QMC trial function}
+\begin{minipage}[t]{0.45\textwidth}
+\begin{center}
+\textbf{Trial function}
+\end{center}
+
+{\footnotesize
+\vspace{1em}
+A many-body ``guess'' to start the QMC calculation
+\[\Psi_T(R) = \Psi_S(R) e^{J(R)}\]
+
+\pagehline
+
+%
+%\color{darkgray}{
+\vspace{1ex}
+
+Slater determinant $\Psi_S(R)$
+
+\vspace{1ex}
+%
+%\[\Psi_S(R) = \det\lbrace \phi_i(r_j) \rbrace\]
+%orbitals $\phi_i$, electrons at $r_j$:
+%
+%or multi-Slater combination
+%\[\Psi_{MS}(R) = \sum_n c_n \Psi_{S,n}(R)\]
+%
+Jastrow factor $e^{J(R)}$ 
+
+\vspace{1ex}
+%depends on pair distances (e-e and e-ion)%$r_{ij}$ and $r_{iI}$ (e-ion).
+%\begin{itemize}[leftmargin=1em, itemsep=-1ex, label=-]
+%\item electrons avoid each other
+%\item cusp conditions
+%\end{itemize}
+%}
+
+$R$: \parbox[t]{.8\textwidth}{$3N$ positions of all $N$ electrons}
+
+}
+\end{minipage}
+\hspace{.02\textwidth}
+\begin{minipage}[t]{0.45\textwidth}
+\begin{center}
+\textbf{Variational Monte Carlo (VMC)}
+\end{center}
+
+{\footnotesize 
+\vspace{1em}
+Goal: \parbox[t]{.7\textwidth}{evaluate $\langle\hat{O}\rangle_{\Psi_T}$ for operator $\hat{O}$ }
+
+\vspace{1em}
+
+\[\langle\hat{O}\rangle = \frac{\langle \Psi_T | \hat{O} | \Psi_T \rangle}
+{\langle \Psi_T | \Psi_T \rangle}
+\]
+
+Sample $|\Psi_T|^2$ by random walk
+
+and average estimator for $\hat{O}$
+\vspace{1em}
+
+$\rightarrow$ use $\langle\hat{H}\rangle_{\Psi_T}$ to {optimize parameters} of $\Psi_T$
+%\pagehline
+
+%\color{darkgray}{
+%Method:
+%\begin{itemize}[leftmargin=1em, itemsep=-1ex, label=-]
+%\item sample $R$ from $|\Psi_T(R)|^2$
+%\item average estimator 
+%
+%$\langle O_L(R)\rangle = 
+%\left\langle \frac{O\Psi_T(R)}{\Psi_T(R)} \right\rangle$.
+%\end{itemize}
+%
+%}
+}
+\end{minipage}
+\end{frame}

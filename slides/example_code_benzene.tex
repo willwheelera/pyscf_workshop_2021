@@ -1,0 +1,50 @@
+\newcommand{\mycode}[1]{
+\vspace{-1em}
+%\begin{center}
+\begin{minipage}[c]{.45\textwidth}
+\lstinputlisting[language=Python]{#1}
+\end{minipage}
+%\end{center}
+}
+
+\newcommand{\mygraphic}[1]{
+\begin{minipage}[c]{.48\textwidth}
+\includegraphics[width=\textwidth]{#1}
+\end{minipage}
+}
+
+\begin{frame}{Example: Benzene molecule}
+\vspace{1em}
+\begin{minipage}{1.05\textwidth}
+\begin{minipage}[t]{0.35\textwidth}
+{\bf HF with PySCF}
+\lstinputlisting[language=Python]{snippets/fig_benzene_scf.py}
+
+\vspace{1em}
+{\footnotesize can also do periodic systems}
+
+\end{minipage}
+\hspace{2em}
+\begin{minipage}[t]{0.58\textwidth}
+{\bf PyQMC recipes}
+
+\vspace{1em}
+\mycode{snippets/fig_optimize_recipe.py}
+\mygraphic{figures/benzene_linemin.pdf}
+
+\vspace{1em}
+\mycode{snippets/fig_vmc_and_dmc_recipe_lines.py}
+\mygraphic{figures/benzene_both.pdf}
+
+%\vspace{1em}
+%\mycode{snippets/fig_dmc_recipe.py}
+%\mygraphic{figures/h2o_dmc.pdf}
+
+\end{minipage}
+\end{minipage}
+
+\end{frame}
+
+
+
+

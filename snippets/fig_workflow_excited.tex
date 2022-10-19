@@ -1,0 +1,26 @@
+\begin{tikzpicture}[>=stealth]
+
+%\node(pyscf) [rectangle, draw, fill=green!5!white, minimum width=3cm, minimum height=1.0cm]{\parbox{3cm}{\centering\small {\bf PySCF}}};% \\ mean-field calculation to generate trial wave function $\Psi$}};
+
+\node(optimize) [rectangle, draw, fill=green!10!white, minimum width=3cm, minimum height=0.8cm]{\parbox{3cm}{\centering\small minimize $\langle \Psi_1 | H | \Psi_1 \rangle$}};% \\ adjust $\Psi$ parameters to minimize $\langle \Psi | H | \Psi \rangle$}};
+
+\node(anchorwfs) [below=7mm of optimize, ellipse, draw, fill=blue!10!white, minimum width=3.5cm, minimum height=1.0cm]{\parbox{2.2cm}{\centering\small anchor wfs $\Psi_1\ldots\Psi_{n-1}$}};
+
+\node(oo) [below=7mm of anchorwfs, rectangle, draw, fill=green!10!white, minimum width=4.5cm, minimum height=1.5cm]{\parbox{5cm}{\centering\small minimize with constraint\\$\displaystyle\langle \Psi | H | \Psi \rangle + \sum_{i=1}^{n-1} \lambda_i |\langle \Psi_i | \Psi \rangle|^2$}};
+
+
+\node(vmc) [below left=1.0cm and 3mm of oo.south, anchor=north east, rectangle, draw, fill=green!10!white, minimum width=2.5cm, minimum height=0.8cm]{\parbox{1.2cm}{\centering\small {\bf VMC}}};% \\ average quantities over optimized $\Psi_i$}};
+\node(dmc) [below right=1.0cm and 3mm of oo.south, anchor=north west, rectangle, draw, fill=green!10!white, minimum width=2.5cm, minimum height=0.8cm]{\parbox{1.2cm}{\centering\small {\bf DMC}}};% \\ average quantities over fixed-node projected $\Psi_i$}};
+
+\draw[->] (optimize) -- 
+%node [left=1cm, ellipse, draw=gray, fill=cyan!10!white, minimum width=2cm]{cell, orbitals} 
+(anchorwfs);
+\draw[->] (anchorwfs) -- (oo);
+\draw[->] (oo.south) -- ++(0, -5mm) node(x)[coordinate]{} -- ++(3.0cm, 0) node[right=2mm]{\Large $\Psi_n$} |- (anchorwfs);
+\draw[->] (x) -- (vmc);
+\draw[->] (x) -- 
+%node[left=5mm, ellipse, draw=gray, fill=cyan!10!white, minimum width=2.2cm]{\parbox{2cm}{\centering optimized parameters}} 
+(dmc);
+\end{tikzpicture}
+
+
